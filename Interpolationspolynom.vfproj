@@ -28,7 +28,9 @@
 		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
 		<File RelativePath=".\int-pol.txt"/>
 		<File RelativePath=".\Interpolationspolynom.pdf"/>
-		<File RelativePath=".\polynom.dat"/></Filter>
+		<File RelativePath=".\koeffizients.dat"/>
+		<File RelativePath=".\polynom.dat"/>
+		<File RelativePath=".\TrigReihe.dat"/></Filter>
 		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
 		<File RelativePath=".\Interpolationspolynom.f90"/>
 		<File RelativePath=".\plot.gp"/></Filter>

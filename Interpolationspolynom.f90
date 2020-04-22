@@ -66,4 +66,58 @@
     deallocate(fa)
     deallocate(a)
     deallocate(basis)
+    
+    call bonusReihe()
     end program Interpolationspolynom
+    
+    function f(x)
+        double precision :: f
+        double precision, intent(in) :: x
+        
+        f = 3d0 / (x**2 + 1d0)
+    end function
+    subroutine bonusReihe()
+        implicit none
+        double precision :: x, treihe
+        double precision, dimension(4) :: a
+        double precision, dimension(3) :: b
+        double precision, parameter :: x_step = 0.01d0, x_min = -1d1
+        integer, parameter :: steps = 2000
+        integer :: i, j
+        double precision :: f
+        
+        
+        open(unit=2, file="koeffizients.dat", action="write")
+        !Berechnen der Koeffizienten mit der Trapezregel fürs Integral
+        do j = 2, 4
+            x = x_min
+            do i = 1, steps - 1
+                x = x_min + i * x_step
+                a(j) = a(j) + (f(x)*cos(x * (j-1))+f(x+x_step)*cos(x * (j-1)))
+                b(j-1) = b(j-1) + (f(x)*sin(x * (j-1))+f(x+x_step)*sin(x * (j-1)))
+                if (j == 2) then
+                    a(1) = a(1) + (f(x)+f(x+x_step)) / (2d0 * acos(-1d0)) * x_step
+                end if
+            end do
+            if (j == 2) write(2,*) "a0 " , a(1) 
+            a(j) = (a(j) / (2d0* acos(-1d0)))  * x_step
+            b(j-1) = (b(j-1) / (2d0* acos(-1d0))) * x_step
+            write(2,*) "a", (j-1) , " mit ", a(j), " b" , (j-1), " mit " , b(j-1)
+        end do
+        
+    
+        
+        open(unit=1, file="TrigReihe.dat", action="write")
+        !Bestimmen der Funktion
+        do i = 1, steps !x werte
+            x = x_min + i * x_step
+            treihe = a(1) / 2d0
+            do j = 2, 4 !n Werte
+                treihe = treihe + a(j) * cos(x * (j-1)) + b(j-1) * sin(x* (j-1))
+            end do
+            write(1,*) x, treihe
+        end do
+        close(1)
+    end subroutine bonusReihe
+    
+    
